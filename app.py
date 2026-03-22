@@ -78,6 +78,14 @@ def login():
 
     return render_template("login.html")
 
+
+@app.route("/")
+def home():
+    if "user_id" in session:
+        return redirect("/dashboard")
+    return redirect("/login")
+
+
 @app.route("/dashboard")
 def dashboard():
 
