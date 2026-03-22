@@ -17,9 +17,6 @@ def get_db_connection():
     return conn
 
 
-@app.route("/")
-def home():
-    return render_template("index.html")
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -81,6 +78,7 @@ def login():
             return "Invalid credentials!"
 
     return render_template("login.html")
+
 
 
 @app.route("/")
