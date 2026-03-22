@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Voting Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+background:linear-gradient(135deg,#1d4350,#a43931);
+font-family:'Poppins',sans-serif;
+color:white;
+height:100vh;
+}
+
+
+/* GLASS CARD */
+
+.dashboard-card{
+
+background:rgba(255,255,255,0.08);
+
+backdrop-filter:blur(15px);
+
+border-radius:20px;
+
+padding:40px;
+
+box-shadow:0px 10px 40px rgba(0,0,0,0.4);
+
+}
+
+
+/* NAVBAR */
+
+.navbar{
+
+background:rgba(0,0,0,0.3);
+
+backdrop-filter:blur(10px);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<nav class="navbar navbar-dark px-4">
+
+<span class="navbar-brand fw-bold">
+
+Secure Smart Voting System
+
+</span>
+
+<div>
+
+<span class="text-light me-3">
+
+👤 {{ session.username }}
+
+</span>
+
+<a href="/logout" class="btn btn-outline-light">
+
+Logout
+
+</a>
+
+</div>
+
+</nav>
+
+
+<div class="container mt-5">
+
+<div class="dashboard-card text-center">
+
+<h2 class="mb-4">
+
+Voting Dashboard
+
+</h2>
+
+
+{% if voted == 0 %}
+
+<a href="/vote" class="btn btn-success btn-lg mb-3">
+
+Cast Your Vote
+
+</a>
+
+{% else %}
+
+<div class="alert alert-success">
+
+You already voted ✅
+
+</div>
+
+{% endif %}
+
+
+<a href="/results" class="btn btn-primary btn-lg">
+
+View Live Results
+
+</a>
+
+
+</div>
+
+</div>
+
+
+</body>
+</html>
