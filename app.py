@@ -198,25 +198,28 @@ def vote():
 
 @app.route("/live_results")
 def live_results():
-
     conn = get_db_connection()
 
-    candidates = conn.execute(
-        "SELECT candidate_name, vote_count FROM candidates"
-    ).fetchall()
+    total_votes = conn.execute(
+        "SELECT COUNT(*) FROM votes"
+    ).fetchone()[0]
+
+    total_candidates = conn.execute(
+        "SELECT COUNT(*) FROM candidates"
+    ).fetchone()[0]
+
+    status = conn.execute(
+        "SELECT status FROM election_status LIMIT 1"
+    ).fetchone()[0]
 
     conn.close()
 
-    data = []
+    return {
+        "total_votes": total_votes,
+        "total_candidates": total_candidates,
+        "status": status
+    }
 
-    for candidate in candidates:
-
-        data.append({
-            "name": candidate["candidate_name"],
-            "votes": candidate["vote_count"]
-        })
-
-    return jsonify(data)
 
 @app.route("/results")
 def results():

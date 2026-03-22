@@ -17,32 +17,28 @@ color:white;
 height:100vh;
 }
 
-
 /* GLASS CARD */
 
 .dashboard-card{
-
 background:rgba(255,255,255,0.08);
-
 backdrop-filter:blur(15px);
-
 border-radius:20px;
-
 padding:40px;
-
 box-shadow:0px 10px 40px rgba(0,0,0,0.4);
-
 }
-
 
 /* NAVBAR */
 
 .navbar{
-
 background:rgba(0,0,0,0.3);
-
 backdrop-filter:blur(10px);
+}
 
+.stat-box{
+background:rgba(255,255,255,0.08);
+border-radius:15px;
+padding:20px;
+margin:10px;
 }
 
 </style>
@@ -55,23 +51,17 @@ backdrop-filter:blur(10px);
 <nav class="navbar navbar-dark px-4">
 
 <span class="navbar-brand fw-bold">
-
 Secure Smart Voting System
-
 </span>
 
 <div>
 
 <span class="text-light me-3">
-
 👤 {{ session.username }}
-
 </span>
 
 <a href="/logout" class="btn btn-outline-light">
-
 Logout
-
 </a>
 
 </div>
@@ -84,35 +74,48 @@ Logout
 <div class="dashboard-card text-center">
 
 <h2 class="mb-4">
-
 Voting Dashboard
-
 </h2>
+
+
+<!-- LIVE COUNTERS -->
+
+<div class="row mb-4">
+
+<div class="col-md-6">
+<div class="stat-box">
+<h5>Total Candidates</h5>
+<h3 id="totalCandidates">{{ total_candidates }}</h3>
+</div>
+</div>
+
+<div class="col-md-6">
+<div class="stat-box">
+<h5>Total Votes Cast</h5>
+<h3 id="totalVotes">{{ total_votes }}</h3>
+</div>
+</div>
+
+</div>
 
 
 {% if voted == 0 %}
 
 <a href="/vote" class="btn btn-success btn-lg mb-3">
-
 Cast Your Vote
-
 </a>
 
 {% else %}
 
 <div class="alert alert-success">
-
 You already voted ✅
-
 </div>
 
 {% endif %}
 
 
 <a href="/results" class="btn btn-primary btn-lg">
-
 View Live Results
-
 </a>
 
 
@@ -120,17 +123,25 @@ View Live Results
 
 </div>
 
+
 <script>
+
 function updateStats() {
     fetch("/live-stats")
         .then(response => response.json())
         .then(data => {
-            document.getElementById("totalVotes").innerText = data.total_votes;
-            document.getElementById("totalCandidates").innerText = data.total_candidates;
+
+            document.getElementById("totalVotes").innerText =
+                data.total_votes;
+
+            document.getElementById("totalCandidates").innerText =
+                data.total_candidates;
+
         });
 }
 
 setInterval(updateStats, 2000);
+
 </script>
 
 </body>
