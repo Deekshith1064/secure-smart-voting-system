@@ -80,23 +80,38 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/live-stats")
+@app.route("/live_stats")
 def live_stats():
+
     conn = get_db_connection()
 
     total_votes = conn.execute(
         "SELECT COUNT(*) FROM votes"
     ).fetchone()[0]
 
-    total_candidates = conn.execute(
-        "SELECT COUNT(*) FROM candidates"
-    ).fetchone()[0]
+
+    winner = conn.execute("""
+
+        SELECT candidate_name
+
+        FROM candidates
+
+        ORDER BY vote_count DESC
+
+        LIMIT 1
+
+    """).fetchone()
+
 
     conn.close()
 
+
     return {
+
         "total_votes": total_votes,
-        "total_candidates": total_candidates
+
+        "winner": winner["candidate_name"] if winner else "Counting..."
+
     }
 
 
@@ -198,27 +213,26 @@ def vote():
 
 @app.route("/live_results")
 def live_results():
+
     conn = get_db_connection()
 
-    total_votes = conn.execute(
-        "SELECT COUNT(*) FROM votes"
-    ).fetchone()[0]
-
-    total_candidates = conn.execute(
-        "SELECT COUNT(*) FROM candidates"
-    ).fetchone()[0]
-
-    status = conn.execute(
-        "SELECT status FROM election_status LIMIT 1"
-    ).fetchone()[0]
+    candidates = conn.execute("""
+        SELECT candidate_name, vote_count
+        FROM candidates
+    """).fetchall()
 
     conn.close()
 
-    return {
-        "total_votes": total_votes,
-        "total_candidates": total_candidates,
-        "status": status
-    }
+    return [
+
+        {
+            "name": c["candidate_name"],
+            "votes": c["vote_count"]
+        }
+
+        for c in candidates
+
+    ]
 
 
 @app.route("/results")
