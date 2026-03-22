@@ -120,6 +120,18 @@ View Live Results
 
 </div>
 
+<script>
+function updateStats() {
+    fetch("/live-stats")
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("totalVotes").innerText = data.total_votes;
+            document.getElementById("totalCandidates").innerText = data.total_candidates;
+        });
+}
+
+setInterval(updateStats, 2000);
+</script>
 
 </body>
 </html>

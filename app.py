@@ -80,6 +80,25 @@ def login():
     return render_template("login.html")
 
 
+@app.route("/live-stats")
+def live_stats():
+    conn = get_db_connection()
+
+    total_votes = conn.execute(
+        "SELECT COUNT(*) FROM votes"
+    ).fetchone()[0]
+
+    total_candidates = conn.execute(
+        "SELECT COUNT(*) FROM candidates"
+    ).fetchone()[0]
+
+    conn.close()
+
+    return {
+        "total_votes": total_votes,
+        "total_candidates": total_candidates
+    }
+
 
 @app.route("/")
 def home():
